@@ -8,47 +8,50 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 
 /**
- * Created on 6/15/2017.
+ * Takes parsed Film data and adds it to our layout.
  */
+public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterViewHolder> {
 
-public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterAdapterViewHolder> {
+    private static final String LOG_TAG = FilmAdapter.class.getSimpleName();
 
     /** Variable holding our data set */
-    private String[] mPosterData;
+    private List<Film> mFilmData;
 
     /** OnClick handler to make it easy for an Activity to interface with our RecyclerView */
-    private final PosterAdapterOnClickHandler mClickHandler;
+    private final FilmAdapterOnClickHandler mClickHandler;
 
     /** Interface that receives onClick messages. */
-    public interface PosterAdapterOnClickHandler {
-        void onClick(String currentPosterData);
+    public interface FilmAdapterOnClickHandler {
+        void onClick(Film currentFilm);
     }
 
-    /** Creates a PosterAdapter.
+    /** Creates a FilmAdapter.
      *
      * @param clickHandler OnClick handler for this adapter, called when an item is clicked.
      */
-    public PosterAdapter(PosterAdapterOnClickHandler clickHandler) {
+    public FilmAdapter(FilmAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
     }
 
-    public class PosterAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class FilmAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final TextView mTvPosterTitle;
-        public final TextView mTvPosterSubTitle;
+        public final TextView mTvFilmTitle;
+        public final TextView mTvFilmSubTitle;
         public final ImageView mIvPoster;
 
-        /** Creates a PosterAdapterViewHolder.
+        /** Creates a FilmAdapterViewHolder.
          *
          * @param itemView View passed in when creating, containing inflated poster_list_item layout
          */
-        public PosterAdapterViewHolder(View itemView) {
+        public FilmAdapterViewHolder(View itemView) {
             super(itemView);
             // Find views in our poster_list_item layout we will populate with data
-            mTvPosterTitle = (TextView) itemView.findViewById(R.id.tv_poster_title);
-            mTvPosterSubTitle = (TextView) itemView.findViewById(R.id.tv_poster_subtitle);
+            mTvFilmTitle = (TextView) itemView.findViewById(R.id.tv_poster_title);
+            mTvFilmSubTitle = (TextView) itemView.findViewById(R.id.tv_poster_subtitle);
             mIvPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
         }
 
@@ -59,8 +62,8 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterAdap
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            String currentPosterData = mPosterData[adapterPosition];
-            mClickHandler.onClick(currentPosterData);
+            Film currentFilm = mFilmData.get(adapterPosition);
+            mClickHandler.onClick(currentFilm);
         }
     }
 
@@ -72,7 +75,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterAdap
      * @return A new PosterAdapterViewHolder that holds the View for each list item
      */
     @Override
-    public PosterAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FilmAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Get context for LayoutInflater to use
         Context context = parent.getContext();
         // Layout to inflate
@@ -82,7 +85,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterAdap
         // Inflate our list item layout and store in a View
         View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
         // Return ViewHolder holding the View we created with our inflated layout above
-        return new PosterAdapterViewHolder(view);
+        return new FilmAdapterViewHolder(view);
     }
 
     /** Binds data to ViewHolder to display based on position argument
@@ -91,9 +94,9 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterAdap
      * @param position Position of the item within the data set the adapter is using
      */
     @Override
-    public void onBindViewHolder(PosterAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(FilmAdapterViewHolder holder, int position) {
         // Get poster and other info from our dataset at position
-        String currentPosterData = mPosterData[position];
+        Film currentFilm = mFilmData.get(position);
         // TODO Set poster to imageview and other info to textviews in our layout
     }
 
@@ -104,21 +107,21 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterAdap
     @Override
     public int getItemCount() {
         // If no data, return 0
-        if (mPosterData == null) {
+        if (mFilmData == null) {
             return 0;
         }
         // If there's data, return the length of our data set
-        return mPosterData.length;
+        return mFilmData.size();
     }
 
-    /** Sets new poster data on a PosterAdapter if we've already created one.
+    /** Sets new film data on a FilmAdapter if we've already created one.
      * Used when we get new data from the web but don't want to create a
-     * new PosterAdapter to display it.
+     * new FilmAdapter to display it.
      *
-     * @param posterData The new poster data to be displayed.
+     * @param filmData The new film data to be displayed.
      */
-    public void setPosterData(String[] posterData) {
-        mPosterData = posterData;
+    public void setFilmData(List<Film> filmData) {
+        mFilmData = filmData;
         notifyDataSetChanged();
     }
 }

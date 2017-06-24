@@ -14,14 +14,20 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements PosterAdapter.PosterAdapterOnClickHandler {
+import com.bskup.filmsy.util.FilmJsonUtils;
+import com.bskup.filmsy.util.NetworkUtils;
+
+import java.net.URL;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private TextView mTvErrorMsg;
     private ProgressBar mProgressBar;
-    private PosterAdapter mPosterAdapter;
+    private FilmAdapter mFilmAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +52,16 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
          * change the child layout size in the RecyclerView */
         mRecyclerView.setHasFixedSize(true);
 
-        /** Create and set PosterAdapter to link our data to the Views that display it */
-        mPosterAdapter = new PosterAdapter(this);
-        mRecyclerView.setAdapter(mPosterAdapter);
+        /** Create and set FilmAdapter to link our data to the Views that display it */
+        mFilmAdapter = new FilmAdapter(this);
+        mRecyclerView.setAdapter(mFilmAdapter);
 
-        /** Call helper method to load our poster data */
-        loadPosterData();
+        /** Call helper method to load our Film data */
+        loadFilmData();
     }
 
     /** Helper method that calls hideErrorMsg helper and starts new AsyncTask */
-    private void loadPosterData() {
+    private void loadFilmData() {
         hideErrorMsg();
 
         // TODO fetch a preference to affect the AsyncTask (see loadWeatherData)
@@ -64,30 +70,30 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
 
     /** Overridden by MainActivity class in order to handle RecyclerView item clicks.
      *
-     * @param currentPosterData Poster data for poster that was clicked
+     * @param currentFilm Film data for film that was clicked
      */
     @Override
-    public void onClick(String currentPosterData) {
+    public void onClick(Film currentFilm) {
         Context context = this;
         Class destinationClass = DetailActivity.class;
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
-        intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, currentPosterData);
+        intentToStartDetailActivity.putExtra("FilmExtra", currentFilm);
         startActivity(intentToStartDetailActivity);
     }
 
-    /** Helper method to hide error msg and show poster data RecyclerView */
+    /** Helper method to hide error msg and show film data RecyclerView */
     private void hideErrorMsg() {
         mTvErrorMsg.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    /** Helper method to show error msg and hide poster data RecyclerView */
+    /** Helper method to show error msg and hide film data RecyclerView */
     private void showErrorMsg() {
         mTvErrorMsg.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.INVISIBLE);
     }
 
-    public class FetchPosterDataTask extends AsyncTask<String, Void, String[]> {
+    public class FetchPosterDataTask extends AsyncTask<String, Void, List<Film>> {
 
         @Override
         protected void onPreExecute() {
@@ -96,19 +102,35 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
         }
 
         @Override
-        protected String[] doInBackground(String... params) {
-            // TODO fill this out (see doInBackground)
+        protected List<Film> doInBackground(String... params) {
+            // If no params, nothing to query
+            if (params.length == 0) {
+                return null;
+            }
+            String endpoint = params[0];
+            URL filmsRequestUrl = NetworkUtils.buildUrl(endpoint);
+
+            try {
+                String jsonFilmsResponse = NetworkUtils.getResponseFromHttpUrl(filmsRequestUrl);
+
+                List<Film> simpleJsonFilmData = FilmJsonUtils.getSimpleFilmListFromJson(MainActivity.this, jsonFilmsResponse);
+
+                return simpleJsonFilmData;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
 
         @Override
-        protected void onPostExecute(String[] posterData) {
+        protected void onPostExecute(List<Film> filmData) {
             mProgressBar.setVisibility(View.INVISIBLE);
-            if (posterData != null) {
+            if (filmData != null) {
                 hideErrorMsg();
-                // Pass poster data to the adapter
-                mPosterAdapter.setPosterData(posterData);
+                // Pass film data to the adapter
+                mFilmAdapter.setFilmData(filmData);
             } else {
-                // If posterData is null, show error
+                // If filmData is null, show error
                 showErrorMsg();
             }
         }
@@ -128,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            mPosterAdapter.setPosterData(null);
-            loadPosterData();
+            mFilmAdapter.setFilmData(null);
+            loadFilmData();
             return true;
         } else if (id == R.id.action_settings) {
             // TODO open settings intent
