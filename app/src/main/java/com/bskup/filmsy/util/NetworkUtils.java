@@ -17,14 +17,14 @@ public class NetworkUtils {
 
     private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String FILMS_BASE_URL =
+    private static final String TMD_BASE_URL =
             "http://api.themoviedb.org/3/movie";
-    private static final String FILMS_POPULAR_ENDPOINT =
+    private static final String TMD_POPULAR_ENDPOINT =
             "/popular";
-    private static final String FILMS_TOP_RATED_ENDPOINT =
+    private static final String TMD_TOP_RATED_ENDPOINT =
             "/top_rated";
     /** API Key - REMOVE FROM PUBLICLY-SHARED CODE */
-    private static final String apiKey = "test123454321abc";
+    private static final String apiKey = "REMOVED_FOR_PUBLIC_CODE_SHARING";
 
     final static String API_KEY_PARAM = "api_key";
 
@@ -36,12 +36,12 @@ public class NetworkUtils {
      */
     public static URL buildUrl(String endpoint) {
         String baseUrlWithEndpoint;
-        if (endpoint == "popular") {
-            baseUrlWithEndpoint = FILMS_BASE_URL + FILMS_POPULAR_ENDPOINT;
-        } else if (endpoint == "top_rated") {
-            baseUrlWithEndpoint = FILMS_BASE_URL + FILMS_TOP_RATED_ENDPOINT;
+        if (endpoint == "/popular") {
+            baseUrlWithEndpoint = TMD_BASE_URL + TMD_POPULAR_ENDPOINT;
+        } else if (endpoint == "/top_rated") {
+            baseUrlWithEndpoint = TMD_BASE_URL + TMD_TOP_RATED_ENDPOINT;
         } else {
-            baseUrlWithEndpoint = FILMS_BASE_URL + "/" + endpoint;
+            baseUrlWithEndpoint = TMD_BASE_URL + endpoint;
         }
 
         Uri builtUri = Uri.parse(baseUrlWithEndpoint).buildUpon()

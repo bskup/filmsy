@@ -19,17 +19,17 @@
         android:layout_marginBottom="16dp"
         android:background="#80CECFFF">
         <TextView
-            android:id="@+id/tv_poster_title"
+            android:id="@+id/tv_film_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:text="Test"/>
+            android:text="Test of the Test"/>
         <TextView
-            android:id="@+id/tv_poster_subtitle"
+            android:id="@+id/tv_film_release_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:text="Double Test"/>
+            android:text="12-34-1234"/>
     </LinearLayout>
 
 </FrameLayout>

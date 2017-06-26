@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 
@@ -18,40 +20,47 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
 
     private static final String LOG_TAG = FilmAdapter.class.getSimpleName();
 
-    /** Variable holding our data set */
-    private List<Film> mFilmData;
+    /* Base image url using w500 as the size */
+    private final String TMD_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w500";
 
-    /** OnClick handler to make it easy for an Activity to interface with our RecyclerView */
+    /* Context passed in via constructor, used with Picasso */
+    private Context mContext;
+
+    /* OnClick handler to make it easy for an Activity to interface with our RecyclerView */
     private final FilmAdapterOnClickHandler mClickHandler;
 
-    /** Interface that receives onClick messages. */
+    /* Interface that receives onClick messages. */
     public interface FilmAdapterOnClickHandler {
         void onClick(Film currentFilm);
     }
+
+    /* Our data set, a list of custom Film objects */
+    private List<Film> mFilmData;
 
     /** Creates a FilmAdapter.
      *
      * @param clickHandler OnClick handler for this adapter, called when an item is clicked.
      */
-    public FilmAdapter(FilmAdapterOnClickHandler clickHandler) {
+    public FilmAdapter(Context context, FilmAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
+        mContext = context;
     }
 
     public class FilmAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView mTvFilmTitle;
-        public final TextView mTvFilmSubTitle;
+        public final TextView mTvFilmReleaseDate;
         public final ImageView mIvPoster;
 
         /** Creates a FilmAdapterViewHolder.
          *
-         * @param itemView View passed in when creating, containing inflated poster_list_item layout
+         * @param itemView View passed in when creating, containing inflated film_list_item layout
          */
         public FilmAdapterViewHolder(View itemView) {
             super(itemView);
-            // Find views in our poster_list_item layout we will populate with data
-            mTvFilmTitle = (TextView) itemView.findViewById(R.id.tv_poster_title);
-            mTvFilmSubTitle = (TextView) itemView.findViewById(R.id.tv_poster_subtitle);
+            // Find views in our film_list_item layout we will populate with data
+            mTvFilmTitle = (TextView) itemView.findViewById(R.id.tv_film_title);
+            mTvFilmReleaseDate = (TextView) itemView.findViewById(R.id.tv_film_release_date);
             mIvPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
         }
 
@@ -79,7 +88,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         // Get context for LayoutInflater to use
         Context context = parent.getContext();
         // Layout to inflate
-        int layoutIdForListItem = R.layout.poster_list_item;
+        int layoutIdForListItem = R.layout.film_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
         // Inflate our list item layout and store in a View
@@ -95,9 +104,33 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
      */
     @Override
     public void onBindViewHolder(FilmAdapterViewHolder holder, int position) {
-        // Get poster and other info from our dataset at position
+        // Get poster and other info from our data set at position
         Film currentFilm = mFilmData.get(position);
-        // TODO Set poster to imageview and other info to textviews in our layout
+        int voteCount = currentFilm.getVoteCount();
+        int id = currentFilm.getId();
+        boolean video = currentFilm.getVideo();
+        double voteAverage = currentFilm.getVoteAverage();
+        String title = currentFilm.getTitle();
+        double popularity = currentFilm.getPopularity();
+        String posterPath = currentFilm.getPosterPath();
+        String originalLanguage = currentFilm.getOriginalLanguage();
+        String originalTitle = currentFilm.getOriginalTitle();
+        int[] genreIds = currentFilm.getGenreIds();
+        String backdropPath = currentFilm.getBackdropPath();
+        boolean adult = currentFilm.getAdult();
+        String overview = currentFilm.getOverview();
+        String releaseDate = currentFilm.getReleaseDate();
+
+        /* Set title and release date */
+        // TODO Do stuff with other fields or delete them
+        holder.mTvFilmTitle.setText(title);
+        holder.mTvFilmReleaseDate.setText(releaseDate);
+
+        /* Set poster to imageView using Picasso */
+        if (posterPath != null) {
+            Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster);
+        }
+
     }
 
     /** Returns the number of items to display. Used to help layout our Views and for animations.

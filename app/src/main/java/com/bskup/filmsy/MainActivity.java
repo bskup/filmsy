@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +24,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    private static final String TMD_POPULAR_ENDPOINT = "/popular";
+    private static final String TMD_TOP_RATED_ENDPOINT = "/top_rated";
 
     private RecyclerView mRecyclerView;
     private TextView mTvErrorMsg;
@@ -53,11 +57,12 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         mRecyclerView.setHasFixedSize(true);
 
         /** Create and set FilmAdapter to link our data to the Views that display it */
-        mFilmAdapter = new FilmAdapter(this);
+        mFilmAdapter = new FilmAdapter(this, this);
         mRecyclerView.setAdapter(mFilmAdapter);
 
         /** Call helper method to load our Film data */
         loadFilmData();
+        Log.d(LOG_TAG, "loadFilmData() called from OnCreate");
     }
 
     /** Helper method that calls hideErrorMsg helper and starts new AsyncTask */
@@ -65,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         hideErrorMsg();
 
         // TODO fetch a preference to affect the AsyncTask (see loadWeatherData)
-        new FetchPosterDataTask().execute();
+        new FetchFilmDataTask().execute(TMD_POPULAR_ENDPOINT);
+        Log.d(LOG_TAG, "new FetchFilmDataTask executed from loadFilmData()");
     }
 
     /** Overridden by MainActivity class in order to handle RecyclerView item clicks.
@@ -93,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         mRecyclerView.setVisibility(View.INVISIBLE);
     }
 
-    public class FetchPosterDataTask extends AsyncTask<String, Void, List<Film>> {
+    public class FetchFilmDataTask extends AsyncTask<String, Void, List<Film>> {
 
         @Override
         protected void onPreExecute() {
