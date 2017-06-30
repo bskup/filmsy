@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Filmsy</string>
+    <string name="settings_theme_label">Theme</string>
+    <string name="settings_theme_key">theme</string>
+    <string name="settings_theme_light_label">Light theme</string>
+    <string name="settings_theme_dark_label">Dark theme</string>
+    <string name="settings_theme_light_value">AppThemeLight</string>
+    <string name="settings_theme_dark_value">AppThemeDark</string>
+    <string name="settings_theme_default">AppThemeDark</string>
+    <string name="settings_title">Settings</string>
 </resources>

@@ -1,11 +1,25 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/light_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/light_colorPrimaryDark</item>
+        <item name="colorAccent">@color/light_colorAccent</item>
+        <item name="bottomNavBg">@color/light_bottomNavBg</item>
+        <item name="bottomNavActive">@color/light_bottomNavActive</item>
+        <item name="bottomNavInactive">@color/light_bottomNavInactive</item>
+    </style>
+
+    <!-- Dark theme. -->
+    <style name="AppThemeDark" parent="Theme.AppCompat">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/dark_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/dark_colorPrimaryDark</item>
+        <item name="colorAccent">@color/dark_colorAccent</item>
+        <item name="bottomNavBg">@color/dark_bottomNavBg</item>
+        <item name="bottomNavActive">@color/dark_bottomNavActive</item>
+        <item name="bottomNavInactive">@color/dark_bottomNavInactive</item>
     </style>
 
 </resources>

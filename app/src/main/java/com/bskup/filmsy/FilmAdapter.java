@@ -20,8 +20,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
 
     private static final String LOG_TAG = FilmAdapter.class.getSimpleName();
 
-    /* Base image url using w500 as the size */
-    private final String TMD_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w500";
+    /* Base image url using w342 as the size */
+    private final String TMD_BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w342";
 
     /* Context passed in via constructor, used with Picasso */
     private Context mContext;

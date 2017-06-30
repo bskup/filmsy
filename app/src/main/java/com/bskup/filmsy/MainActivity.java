@@ -1,13 +1,17 @@
 package com.bskup.filmsy;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,11 +19,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationAdapter;
 import com.bskup.filmsy.util.FilmJsonUtils;
 import com.bskup.filmsy.util.NetworkUtils;
 
 import java.net.URL;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler {
 
@@ -32,11 +39,26 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     private TextView mTvErrorMsg;
     private ProgressBar mProgressBar;
     private FilmAdapter mFilmAdapter;
+    private Activity mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /* Theme change based on preference */
+        String themeName = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString("theme", "AppThemeDark");
+        Log.v(LOG_TAG, "value for theme String in mainactivity oncreate: " + themeName);
+        if (themeName.equals("AppThemeLight")) {
+            setTheme(R.style.AppThemeLight);
+        } else if (themeName.equals("AppThemeDark")) {
+            setTheme(R.style.AppThemeDark);
+
+        }
+
         setContentView(R.layout.activity_main);
+
+        mContext = this;
 
         /** Get reference to RecyclerView, error textView and progress bar */
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_main_scrolling_posters);
@@ -47,12 +69,46 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
          * LinearLayoutManager can support HORIZONTAL or VERTICAL. The reverse layout param
          * (false) is useful mostly for HORIZONTAL layouts that should reverse for right to left
          * languages. */
-        // TODO try other layout types, grid?
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager
+                = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        /** Use this setting to improve performance if you know that changes in content do not
+        /* Setup bottom nav colors based on theme */
+        AHBottomNavigation bottomNav = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
+
+        TypedValue typedValueBg = new TypedValue();
+        Resources.Theme theme = mContext.getTheme();
+        theme.resolveAttribute(R.attr.bottomNavBg, typedValueBg, true);
+        int resolvedBottomNavBgColor = typedValueBg.data;
+        Log.d(LOG_TAG, "resolvedBottomNavBgColor: " + resolvedBottomNavBgColor);
+        /*int[] bottomNavBgAttrs = {R.attr.theme_dependent_bottom_nav_bg};
+        TypedArray typedArrayBg = mContext.obtainStyledAttributes(bottomNavBgAttrs);
+        int bottomNavBgColor = typedArrayBg.getResourceId(0, android.R.color.transparent);
+        typedArrayBg.recycle();*/
+        bottomNav.setDefaultBackgroundColor(resolvedBottomNavBgColor);
+
+        TypedValue typedValueActive = new TypedValue();
+        theme.resolveAttribute(R.attr.bottomNavActive, typedValueActive, true);
+        int resolvedBottomNavActiveColor = typedValueActive.data;
+        /*int[] bottomNavActiveAttrs = {R.attr.theme_dependent_bottom_nav_active};
+        TypedArray typedArrayActive = mContext.obtainStyledAttributes(bottomNavActiveAttrs);
+        int bottomNavActiveColor = typedArrayActive.getResourceId(0, android.R.color.transparent);
+        typedArrayActive.recycle();*/
+        bottomNav.setAccentColor(resolvedBottomNavActiveColor);
+
+        TypedValue typedValueInactive = new TypedValue();
+        theme.resolveAttribute(R.attr.bottomNavInactive, typedValueInactive, true);
+        int resolvedBottomNavInactiveColor = typedValueInactive.data;
+        /*int[] bottomNavInactiveAttrs = {R.attr.theme_dependent_bottom_nav_inactive};
+        TypedArray typedArrayInactive = mContext.obtainStyledAttributes(bottomNavInactiveAttrs);
+        int bottomNavInactiveColor = typedArrayActive.getResourceId(0, android.R.color.transparent);
+        typedArrayInactive.recycle();*/
+        bottomNav.setInactiveColor(resolvedBottomNavInactiveColor);
+
+        AHBottomNavigationAdapter bottomNavAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_nav_main);
+        bottomNavAdapter.setupWithBottomNavigation(bottomNav);
+
+        /** Use to improve performance if you know that changes in content do not
          * change the child layout size in the RecyclerView */
         mRecyclerView.setHasFixedSize(true);
 
