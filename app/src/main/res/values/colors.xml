@@ -6,10 +6,10 @@
     <color name="light_bottomNavBg">#3F51B5</color>
     <color name="light_bottomNavActive">#FF4081</color>
     <color name="light_bottomNavInactive">#FFFFFF</color>
-    /* MD 700 */
-    <color name="dark_colorPrimary">#512DA8</color>
     /* MD 900 */
-    <color name="dark_colorPrimaryDark">#311B92</color>
+    <color name="dark_colorPrimary">#212121</color>
+    /* MD 900 */
+    <color name="dark_colorPrimaryDark">#000000</color>
     /* MD A100 */
     <color name="dark_colorAccent">#FFFF8D</color>
     /* MD 900 */
@@ -18,4 +18,8 @@
     <color name="dark_bottomNavActive">#FFFF8D</color>
     /* MD 500 */
     <color name="dark_bottomNavInactive">#9E9E9E</color>
+    /* MD 700 */
+    <color name="dark_colorAccent2">#512DA8</color>
+    /* MD 900 */
+    <color name="dark_colorAccent2Dark">#311B92</color>
 </resources>

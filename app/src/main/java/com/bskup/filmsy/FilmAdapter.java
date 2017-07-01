@@ -1,14 +1,23 @@
 package com.bskup.filmsy;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -25,6 +34,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
 
     /* Context passed in via constructor, used with Picasso */
     private Context mContext;
+
+    private FilmAdapterViewHolder mHolder;
 
     /* OnClick handler to make it easy for an Activity to interface with our RecyclerView */
     private final FilmAdapterOnClickHandler mClickHandler;
@@ -51,6 +62,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         public final TextView mTvFilmTitle;
         public final TextView mTvFilmReleaseDate;
         public final ImageView mIvPoster;
+        public final LinearLayout mLlColoredBarWithText;
 
         /** Creates a FilmAdapterViewHolder.
          *
@@ -62,6 +74,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
             mTvFilmTitle = (TextView) itemView.findViewById(R.id.tv_film_title);
             mTvFilmReleaseDate = (TextView) itemView.findViewById(R.id.tv_film_release_date);
             mIvPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
+            mLlColoredBarWithText = (LinearLayout) itemView.findViewById(R.id.ll_colored_bar_with_text);
         }
 
         /** Called by the child views when clicked.
@@ -103,9 +116,10 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
      * @param position Position of the item within the data set the adapter is using
      */
     @Override
-    public void onBindViewHolder(FilmAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(final FilmAdapterViewHolder holder, final int position) {
+        mHolder = holder;
         // Get poster and other info from our data set at position
-        Film currentFilm = mFilmData.get(position);
+        final Film currentFilm = mFilmData.get(position);
         int voteCount = currentFilm.getVoteCount();
         int id = currentFilm.getId();
         boolean video = currentFilm.getVideo();
@@ -125,10 +139,34 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         // TODO Do stuff with other fields or delete them
         holder.mTvFilmTitle.setText(title);
         holder.mTvFilmReleaseDate.setText(releaseDate);
+        Log.d(LOG_TAG, "Title and release date set on position: " + position);
 
         /* Set poster to imageView using Picasso */
         if (posterPath != null) {
-            Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster);
+            Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster, new Callback.EmptyCallback() {
+                @Override
+                public void onSuccess() {
+                    Log.d(LOG_TAG, "onSuccess called for position: " + position);
+                    Bitmap bitmap = ((BitmapDrawable) holder.mIvPoster.getDrawable()).getBitmap();
+                    if (bitmap != null) {
+                        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                Palette.Swatch mutedSwatch = palette.getMutedSwatch();
+                                Log.d(LOG_TAG, "mutedSwatch generated for position: " + position);
+                                if (mutedSwatch == null) {
+                                    Log.d(LOG_TAG, "Null swatch!");
+                                    return;
+                                }
+                                holder.mTvFilmTitle.setTextColor(mutedSwatch.getBodyTextColor());
+                                holder.mTvFilmReleaseDate.setTextColor(mutedSwatch.getTitleTextColor());
+                                holder.mLlColoredBarWithText.setBackgroundColor(mutedSwatch.getRgb());
+                            }
+                        });
+                    }
+                }
+            });
+
         }
 
     }

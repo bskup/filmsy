@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,9 +38,9 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     private RecyclerView mRecyclerView;
     private TextView mTvErrorMsg;
-    private ProgressBar mProgressBar;
     private FilmAdapter mFilmAdapter;
     private Activity mContext;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +61,21 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         mContext = this;
 
-        /** Get reference to RecyclerView, error textView and progress bar */
+        /* Get reference to RecyclerView, error textView and progress bar */
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_main_scrolling_posters);
         mTvErrorMsg = (TextView) findViewById(R.id.tv_main_error_msg);
-        mProgressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+
+        /* Find swipe refresh layout and set onRefresh listener to handle swipe down refresh */
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                /* Do stuff when user swipes down to refresh */
+                Log.v(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
+                mFilmAdapter.setFilmData(null);
+                loadFilmData();
+            }
+        });
 
         /** Create and set layout type for our RecyclerView using LayoutManager
          * LinearLayoutManager can support HORIZONTAL or VERTICAL. The reverse layout param
@@ -108,15 +120,15 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         AHBottomNavigationAdapter bottomNavAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_nav_main);
         bottomNavAdapter.setupWithBottomNavigation(bottomNav);
 
-        /** Use to improve performance if you know that changes in content do not
+        /* Use to improve performance if you know that changes in content do not
          * change the child layout size in the RecyclerView */
         mRecyclerView.setHasFixedSize(true);
 
-        /** Create and set FilmAdapter to link our data to the Views that display it */
+        /* Create and set FilmAdapter to link our data to the Views that display it */
         mFilmAdapter = new FilmAdapter(this, this);
         mRecyclerView.setAdapter(mFilmAdapter);
 
-        /** Call helper method to load our Film data */
+        /* Call helper method to load our Film data */
         loadFilmData();
         Log.d(LOG_TAG, "loadFilmData() called from OnCreate");
     }
@@ -160,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
+            //mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -186,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         @Override
         protected void onPostExecute(List<Film> filmData) {
-            mProgressBar.setVisibility(View.INVISIBLE);
+            //mProgressBar.setVisibility(View.INVISIBLE);
+            mSwipeRefreshLayout.setRefreshing(false);
             if (filmData != null) {
                 hideErrorMsg();
                 // Pass film data to the adapter
@@ -214,9 +227,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         if (id == R.id.action_refresh) {
             mFilmAdapter.setFilmData(null);
             loadFilmData();
-            return true;
-        } else if (id == R.id.action_settings) {
-            // TODO open settings intent
             return true;
         }
         return super.onOptionsItemSelected(item);
