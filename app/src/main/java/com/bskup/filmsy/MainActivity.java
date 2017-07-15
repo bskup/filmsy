@@ -1,6 +1,7 @@
 package com.bskup.filmsy;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -17,8 +18,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.app.Fragment;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationAdapter;
@@ -61,30 +62,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         mContext = this;
 
-        /* Get reference to RecyclerView, error textView and progress bar */
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_main_scrolling_posters);
-        mTvErrorMsg = (TextView) findViewById(R.id.tv_main_error_msg);
-
-        /* Find swipe refresh layout and set onRefresh listener to handle swipe down refresh */
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                /* Do stuff when user swipes down to refresh */
-                Log.v(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
-                mFilmAdapter.setFilmData(null);
-                loadFilmData();
-            }
-        });
-
-        /** Create and set layout type for our RecyclerView using LayoutManager
-         * LinearLayoutManager can support HORIZONTAL or VERTICAL. The reverse layout param
-         * (false) is useful mostly for HORIZONTAL layouts that should reverse for right to left
-         * languages. */
-        GridLayoutManager layoutManager
-                = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-
         /* Setup bottom nav colors based on theme */
         AHBottomNavigation bottomNav = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
@@ -93,44 +70,57 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         theme.resolveAttribute(R.attr.bottomNavBg, typedValueBg, true);
         int resolvedBottomNavBgColor = typedValueBg.data;
         Log.d(LOG_TAG, "resolvedBottomNavBgColor: " + resolvedBottomNavBgColor);
-        /*int[] bottomNavBgAttrs = {R.attr.theme_dependent_bottom_nav_bg};
-        TypedArray typedArrayBg = mContext.obtainStyledAttributes(bottomNavBgAttrs);
-        int bottomNavBgColor = typedArrayBg.getResourceId(0, android.R.color.transparent);
-        typedArrayBg.recycle();*/
         bottomNav.setDefaultBackgroundColor(resolvedBottomNavBgColor);
 
         TypedValue typedValueActive = new TypedValue();
         theme.resolveAttribute(R.attr.bottomNavActive, typedValueActive, true);
         int resolvedBottomNavActiveColor = typedValueActive.data;
-        /*int[] bottomNavActiveAttrs = {R.attr.theme_dependent_bottom_nav_active};
-        TypedArray typedArrayActive = mContext.obtainStyledAttributes(bottomNavActiveAttrs);
-        int bottomNavActiveColor = typedArrayActive.getResourceId(0, android.R.color.transparent);
-        typedArrayActive.recycle();*/
         bottomNav.setAccentColor(resolvedBottomNavActiveColor);
 
         TypedValue typedValueInactive = new TypedValue();
         theme.resolveAttribute(R.attr.bottomNavInactive, typedValueInactive, true);
         int resolvedBottomNavInactiveColor = typedValueInactive.data;
-        /*int[] bottomNavInactiveAttrs = {R.attr.theme_dependent_bottom_nav_inactive};
-        TypedArray typedArrayInactive = mContext.obtainStyledAttributes(bottomNavInactiveAttrs);
-        int bottomNavInactiveColor = typedArrayActive.getResourceId(0, android.R.color.transparent);
-        typedArrayInactive.recycle();*/
         bottomNav.setInactiveColor(resolvedBottomNavInactiveColor);
 
+        /* Setup bottom nav adapter */
         AHBottomNavigationAdapter bottomNavAdapter = new AHBottomNavigationAdapter(this, R.menu.bottom_nav_main);
         bottomNavAdapter.setupWithBottomNavigation(bottomNav);
 
-        /* Use to improve performance if you know that changes in content do not
-         * change the child layout size in the RecyclerView */
-        mRecyclerView.setHasFixedSize(true);
+        /* Setup bottom nav listener */
+        bottomNav.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+            @Override
+            public boolean onTabSelected(int position, boolean wasSelected) {
+                /* Do something when user clicks a bottom nav menu icon */
+                Log.d(LOG_TAG, "Bottom nav position clicked was: " + position);
+                //Fragment selectedFragment = null;
+                switch (position) {
+                    case 0:
+                        PopularFragment popularFragment = PopularFragment.newInstance();
+                        FragmentTransaction popularTransaction = getFragmentManager().beginTransaction();
+                        popularTransaction.replace(R.id.fragment_container, popularFragment);
+                        popularTransaction.commit();
+                        return true;
+                    case 1:
+                        TopRatedFragment topRatedFragment = TopRatedFragment.newInstance();
+                        FragmentTransaction topRatedTransaction = getFragmentManager().beginTransaction();
+                        topRatedTransaction.replace(R.id.fragment_container, topRatedFragment);
+                        topRatedTransaction.commit();
+                        return true;
+                    case 2:
+                        SettingsFragment settingsFragment = SettingsFragment.newInstance();
+                        FragmentTransaction settingsTransaction = getFragmentManager().beginTransaction();
+                        settingsTransaction.replace(R.id.fragment_container, settingsFragment);
+                        settingsTransaction.commit();
+                        return true;
+                }
+                return true;
+            }
+        });
 
-        /* Create and set FilmAdapter to link our data to the Views that display it */
-        mFilmAdapter = new FilmAdapter(this, this);
-        mRecyclerView.setAdapter(mFilmAdapter);
-
-        /* Call helper method to load our Film data */
-        loadFilmData();
-        Log.d(LOG_TAG, "loadFilmData() called from OnCreate");
+        /* Manually display first fragment on first launch */
+        FragmentTransaction firstLaunchTransaction = getFragmentManager().beginTransaction();
+        firstLaunchTransaction.replace(R.id.fragment_container, new PopularFragment());
+        firstLaunchTransaction.commit();
     }
 
     /** Helper method that calls hideErrorMsg helper and starts new AsyncTask */
