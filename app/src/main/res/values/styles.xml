@@ -9,6 +9,7 @@
         <item name="bottomNavBg">@color/light_bottomNavBg</item>
         <item name="bottomNavActive">@color/light_bottomNavActive</item>
         <item name="bottomNavInactive">@color/light_bottomNavInactive</item>
+        <item name="listItemCardTextColor">@color/light_listItemCardTextColor</item>
     </style>
 
     <!-- Dark theme. -->
@@ -20,6 +21,7 @@
         <item name="bottomNavBg">@color/dark_bottomNavBg</item>
         <item name="bottomNavActive">@color/dark_bottomNavActive</item>
         <item name="bottomNavInactive">@color/dark_bottomNavInactive</item>
+        <item name="listItemCardTextColor">@color/dark_listItemCardTextColor</item>
     </style>
 
 </resources>

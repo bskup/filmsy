@@ -1,6 +1,7 @@
 package com.bskup.filmsy;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +65,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         public final TextView mTvFilmReleaseDate;
         public final ImageView mIvPoster;
         public final LinearLayout mLlColoredBarWithText;
+        public final Resources.Theme mCurrentTheme;
 
         /** Creates a FilmAdapterViewHolder.
          *
@@ -75,6 +78,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
             mTvFilmReleaseDate = (TextView) itemView.findViewById(R.id.tv_film_release_date);
             mIvPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
             mLlColoredBarWithText = (LinearLayout) itemView.findViewById(R.id.ll_colored_bar_with_text);
+
+            mCurrentTheme = mContext.getTheme();
         }
 
         /** Called by the child views when clicked.
@@ -141,7 +146,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         holder.mTvFilmReleaseDate.setText(releaseDate);
         Log.d(LOG_TAG, "Title and release date set on position: " + position);
 
-        /* Set poster to imageView using Picasso */
+        /* Set poster to imageView using Picasso, colors using Palette */
         if (posterPath != null) {
             Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster, new Callback.EmptyCallback() {
                 @Override
@@ -158,8 +163,15 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
                                     Log.d(LOG_TAG, "Null swatch!");
                                     return;
                                 }
-                                holder.mTvFilmTitle.setTextColor(mutedSwatch.getBodyTextColor());
-                                holder.mTvFilmReleaseDate.setTextColor(mutedSwatch.getTitleTextColor());
+
+                                /* Set list item card text color based on theme */
+                                TypedValue typedValueTextColor = new TypedValue();
+                                holder.mCurrentTheme.resolveAttribute(R.attr.listItemCardTextColor, typedValueTextColor, true);
+                                int resolvedListItemCardTextColor = typedValueTextColor.data;
+                                Log.d(LOG_TAG, "resolvedListItemCardTextColor: " + Integer.toHexString(resolvedListItemCardTextColor));
+
+                                holder.mTvFilmTitle.setTextColor(resolvedListItemCardTextColor);
+                                holder.mTvFilmReleaseDate.setTextColor(resolvedListItemCardTextColor);
                                 holder.mLlColoredBarWithText.setBackgroundColor(mutedSwatch.getRgb());
                             }
                         });

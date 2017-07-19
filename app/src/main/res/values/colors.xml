@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_colorPrimary">#3F51B5</color>
-    <color name="light_colorPrimaryDark">#303F9F</color>
-    <color name="light_colorAccent">#FF4081</color>
-    <color name="light_bottomNavBg">#3F51B5</color>
-    <color name="light_bottomNavActive">#FF4081</color>
-    <color name="light_bottomNavInactive">#FFFFFF</color>
+    <color name="light_colorPrimary">#039BE5</color>
+    <color name="light_colorPrimaryDark">#0277BD</color>
+    <color name="light_colorAccent">#FFAB00</color>
+    <color name="light_bottomNavBg">#039BE5</color>
+    <color name="light_bottomNavActive">#FFFFFF</color>
+    <color name="light_bottomNavInactive">#81D4FA</color>
+    <color name="light_listItemCardTextColor">#FFFFFF</color>
     /* MD 900 */
     <color name="dark_colorPrimary">#212121</color>
     /* MD 900 */
@@ -22,4 +23,5 @@
     <color name="dark_colorAccent2">#512DA8</color>
     /* MD 900 */
     <color name="dark_colorAccent2Dark">#311B92</color>
+    <color name="dark_listItemCardTextColor">#FFFFFF</color>
 </resources>

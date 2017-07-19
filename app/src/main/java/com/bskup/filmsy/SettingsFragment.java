@@ -1,5 +1,6 @@
 package com.bskup.filmsy;
 
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -45,9 +46,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("theme")) {
             /* If theme preference changed, recreate the activity */
+            // TODO recreate at settings screen
+            mPreferencesChanged = true;
             getActivity().recreate();
         }
-        mPreferencesChanged = true;
         Log.v(LOG_TAG, "onSharedPreferenceChanged called");
         Log.v(LOG_TAG, "mPreferencesChanged: " + mPreferencesChanged);
     }

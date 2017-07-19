@@ -117,10 +117,13 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             }
         });
 
-        /* Manually display first fragment on first launch */
-        FragmentTransaction firstLaunchTransaction = getFragmentManager().beginTransaction();
-        firstLaunchTransaction.replace(R.id.fragment_container, new PopularFragment());
-        firstLaunchTransaction.commit();
+        /* If savedInstanceState isn't null, we might be recreating activity after changing theme */
+        if (savedInstanceState == null) {
+            /* Manually display first fragment on first launch */
+            FragmentTransaction firstLaunchTransaction = getFragmentManager().beginTransaction();
+            firstLaunchTransaction.replace(R.id.fragment_container, new PopularFragment());
+            firstLaunchTransaction.commit();
+        }
     }
 
     /** Helper method that calls hideErrorMsg helper and starts new AsyncTask */
@@ -162,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -188,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         @Override
         protected void onPostExecute(List<Film> filmData) {
-            //mProgressBar.setVisibility(View.INVISIBLE);
             mSwipeRefreshLayout.setRefreshing(false);
             if (filmData != null) {
                 hideErrorMsg();
@@ -201,24 +202,4 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Use AppCompat's getMenuInflater to get the inflater to create our menu
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        // Return true so menu is displayed in toolbar
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_refresh) {
-            mFilmAdapter.setFilmData(null);
-            loadFilmData();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

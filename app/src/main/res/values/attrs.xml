@@ -3,4 +3,5 @@
     <attr name="bottomNavBg" format="reference"/>
     <attr name="bottomNavActive" format="reference"/>
     <attr name="bottomNavInactive" format="reference"/>
+    <attr name="listItemCardTextColor" format="reference"/>
 </resources>
