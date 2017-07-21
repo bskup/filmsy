@@ -24,7 +24,7 @@ public class NetworkUtils {
     private static final String TMD_TOP_RATED_ENDPOINT =
             "/top_rated";
     /** API Key - REMOVE FROM PUBLICLY-SHARED CODE */
-    private static final String apiKey = "677327156cd5bd6d499e0b800cfe124b";
+    private static final String apiKey = "REMOVED_FOR_SHARING";
 
     final static String API_KEY_PARAM = "api_key";
 

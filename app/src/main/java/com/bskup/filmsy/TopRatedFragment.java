@@ -122,7 +122,7 @@ public class TopRatedFragment extends Fragment implements FilmAdapter.FilmAdapte
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
         intentToStartDetailActivity.putExtra("FilmExtra", currentFilm);
         startActivity(intentToStartDetailActivity);
-        Log.d(LOG_TAG, "onClick called from onCreateView");
+        Log.d(LOG_TAG, "onClick called from TopRatedFragment");
     }
 
     /** Helper method to hide error msg and show film data RecyclerView */

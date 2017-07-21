@@ -80,6 +80,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
             mLlColoredBarWithText = (LinearLayout) itemView.findViewById(R.id.ll_colored_bar_with_text);
 
             mCurrentTheme = mContext.getTheme();
+
+            itemView.setOnClickListener(this);
         }
 
         /** Called by the child views when clicked.
@@ -90,7 +92,9 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Film currentFilm = mFilmData.get(adapterPosition);
+            Log.d(LOG_TAG, "onClick called from inside FilmAdapterViewHolder");
             mClickHandler.onClick(currentFilm);
+            Log.d(LOG_TAG, "onClick called from inside FilmAdapterViewHolder");
         }
     }
 
@@ -146,6 +150,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         holder.mTvFilmReleaseDate.setText(releaseDate);
         Log.d(LOG_TAG, "Title and release date set on position: " + position);
 
+        // TODO Move palette to only in DetailActivity, doesn't look good here and takes too long
         /* Set poster to imageView using Picasso, colors using Palette */
         if (posterPath != null) {
             Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster, new Callback.EmptyCallback() {
