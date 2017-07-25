@@ -16,7 +16,7 @@ import android.util.Log;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
 
     /* Boolean whether preferences have changed or not */
     public static Boolean mPreferencesChanged = false;
@@ -40,6 +40,19 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         Preference theme = findPreference(getString(R.string.settings_theme_key));
         bindPreferenceSummaryToValue(theme);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume called from settingsFragment");
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override

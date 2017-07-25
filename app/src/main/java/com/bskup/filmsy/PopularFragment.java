@@ -55,6 +55,12 @@ public class PopularFragment extends Fragment implements FilmAdapter.FilmAdapter
         Log.d(LOG_TAG, "loadFilmData() called from OnCreate");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume called from PopularFragment");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
