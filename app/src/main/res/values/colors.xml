@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_colorPrimary">#424242</color>
-    <color name="light_colorPrimaryDark">#424242</color>
-    <color name="light_colorAccent">#616161</color>
-    <color name="light_bottomNavBg">#424242</color>
+    <color name="light_colorPrimary">#263238</color>
+    <color name="light_colorPrimaryDark">#1f292e</color>
+    <color name="light_colorAccent">#69F0AE</color>
+    <color name="light_bottomNavBg">#263238</color>
     <color name="light_bottomNavActive">#69F0AE</color>
     <color name="light_bottomNavInactive">#9e9e9e</color>
     <color name="light_listItemCardTextColor">#FFFFFF</color>
-    /* MD 900 */
-    <color name="dark_colorPrimary">#212121</color>
-    /* MD 900 */
+    <color name="light_listItemBgColor">#263238</color>
+    <color name="dark_colorPrimary">#000000</color>
     <color name="dark_colorPrimaryDark">#000000</color>
-    /* MD A100 */
     <color name="dark_colorAccent">#69F0AE</color>
-    /* MD 900 */
-    <color name="dark_bottomNavBg">#212121</color>
-    /* MD A100 */
+    <color name="dark_bottomNavBg">#000000</color>
     <color name="dark_bottomNavActive">#69F0AE</color>
-    /* MD 500 */
     <color name="dark_bottomNavInactive">#9E9E9E</color>
-    /* MD 700 */
     <color name="dark_colorAccent2">#512DA8</color>
-    /* MD 900 */
     <color name="dark_colorAccent2Dark">#311B92</color>
     <color name="dark_listItemCardTextColor">#FFFFFF</color>
+    <color name="dark_listItemBgColor">#000000</color>
 </resources>

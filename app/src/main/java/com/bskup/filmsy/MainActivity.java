@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -62,6 +63,12 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         setContentView(R.layout.activity_main);
 
         mContext = this;
+
+        /* Setup toolbar */
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Filmsy");
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         /* Setup bottom nav colors based on theme */
         AHBottomNavigation bottomNav = (AHBottomNavigation) findViewById(R.id.bottom_navigation);

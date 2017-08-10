@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_colorPrimary</item>
         <item name="colorPrimaryDark">@color/light_colorPrimaryDark</item>
@@ -10,10 +10,12 @@
         <item name="bottomNavActive">@color/light_bottomNavActive</item>
         <item name="bottomNavInactive">@color/light_bottomNavInactive</item>
         <item name="listItemCardTextColor">@color/light_listItemCardTextColor</item>
+        <item name="listItemBgColor">@color/light_listItemBgColor</item>
+        <item name="themeName">@string/theme_name_light</item>
     </style>
 
     <!-- Dark theme. -->
-    <style name="AppThemeDark" parent="Theme.AppCompat">
+    <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/dark_colorPrimary</item>
         <item name="colorPrimaryDark">@color/dark_colorPrimaryDark</item>
@@ -22,6 +24,8 @@
         <item name="bottomNavActive">@color/dark_bottomNavActive</item>
         <item name="bottomNavInactive">@color/dark_bottomNavInactive</item>
         <item name="listItemCardTextColor">@color/dark_listItemCardTextColor</item>
+        <item name="listItemBgColor">@color/dark_listItemBgColor</item>
+        <item name="themeName">@string/theme_name_dark</item>
     </style>
 
 </resources>

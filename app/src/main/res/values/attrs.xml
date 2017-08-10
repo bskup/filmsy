@@ -4,4 +4,6 @@
     <attr name="bottomNavActive" format="reference"/>
     <attr name="bottomNavInactive" format="reference"/>
     <attr name="listItemCardTextColor" format="reference"/>
+    <attr name="listItemBgColor" format="reference"/>
+    <attr name="themeName" format="reference"/>
 </resources>

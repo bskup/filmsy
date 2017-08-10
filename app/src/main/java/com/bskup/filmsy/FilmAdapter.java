@@ -1,11 +1,13 @@
 package com.bskup.filmsy;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,7 +23,11 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -64,8 +70,10 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         public final TextView mTvFilmTitle;
         public final TextView mTvFilmReleaseDate;
         public final ImageView mIvPoster;
-        public final LinearLayout mLlColoredBarWithText;
+        public final ConstraintLayout mLlColoredBarWithText;
         public final Resources.Theme mCurrentTheme;
+        public final TextView mTvFilmPopularity;
+        public final TextView mTvFilmRating;
 
         /** Creates a FilmAdapterViewHolder.
          *
@@ -73,12 +81,14 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
          */
         public FilmAdapterViewHolder(View itemView) {
             super(itemView);
-            // Find views in our film_list_item layout we will populate with data
-            mTvFilmTitle = (TextView) itemView.findViewById(R.id.tv_film_title);
-            mTvFilmReleaseDate = (TextView) itemView.findViewById(R.id.tv_film_release_date);
-            mIvPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
-            mLlColoredBarWithText = (LinearLayout) itemView.findViewById(R.id.ll_colored_bar_with_text);
 
+            // Find views in our film_list_item layout we will populate with data
+            mTvFilmTitle = itemView.findViewById(R.id.tv_film_title);
+            mTvFilmReleaseDate = itemView.findViewById(R.id.tv_film_release_date);
+            mIvPoster = itemView.findViewById(R.id.iv_poster);
+            mLlColoredBarWithText = itemView.findViewById(R.id.ll_colored_bar_with_text);
+            mTvFilmPopularity = itemView.findViewById(R.id.tv_film_popularity);
+            mTvFilmRating = itemView.findViewById(R.id.tv_film_rating);
             mCurrentTheme = mContext.getTheme();
 
             itemView.setOnClickListener(this);
@@ -127,7 +137,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
     @Override
     public void onBindViewHolder(final FilmAdapterViewHolder holder, final int position) {
         mHolder = holder;
-        // Get poster and other info from our data set at position
+        /* Get poster and other info from our data set at position */
         final Film currentFilm = mFilmData.get(position);
         int voteCount = currentFilm.getVoteCount();
         int id = currentFilm.getId();
@@ -144,13 +154,28 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         String overview = currentFilm.getOverview();
         String releaseDate = currentFilm.getReleaseDate();
 
-        /* Set title and release date */
+        /* Set title, parse release date into only year and set it */
         // TODO Do stuff with other fields or delete them
         holder.mTvFilmTitle.setText(title);
-        holder.mTvFilmReleaseDate.setText(releaseDate);
+
+        /* Parse date */
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        SimpleDateFormat outputOnlyYearFormat = new SimpleDateFormat("yyyy", Locale.US);
+        try {
+            Date releaseInput = inputFormat.parse(releaseDate);
+            holder.mTvFilmReleaseDate.setText(outputOnlyYearFormat.format(releaseInput));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            holder.mTvFilmReleaseDate.setText(releaseDate);
+        }
+
+        /* Set popularity and rating */
+        holder.mTvFilmPopularity.setText(String.valueOf(popularity));
+        holder.mTvFilmRating.setText(String.valueOf(voteAverage));
+
+
         Log.d(LOG_TAG, "Title and release date set on position: " + position);
 
-        // TODO Move palette to only in DetailActivity, doesn't look good here and takes too long
         /* Set poster to imageView using Picasso, colors using Palette */
         if (posterPath != null) {
             Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster, new Callback.EmptyCallback() {
@@ -162,22 +187,30 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
                         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(Palette palette) {
+                                Log.d(LOG_TAG, "palette generated for position: " + position);
                                 Palette.Swatch mutedSwatch = palette.getMutedSwatch();
-                                Log.d(LOG_TAG, "mutedSwatch generated for position: " + position);
                                 if (mutedSwatch == null) {
                                     Log.d(LOG_TAG, "Null swatch!");
                                     return;
                                 }
 
-                                /* Set list item card text color based on theme */
-                                TypedValue typedValueTextColor = new TypedValue();
-                                holder.mCurrentTheme.resolveAttribute(R.attr.listItemCardTextColor, typedValueTextColor, true);
-                                int resolvedListItemCardTextColor = typedValueTextColor.data;
-                                Log.d(LOG_TAG, "resolvedListItemCardTextColor: " + Integer.toHexString(resolvedListItemCardTextColor));
+                                /* Resolve list item bg color and theme name */
+                                TypedValue typedValueListItemBgColor = new TypedValue();
+                                holder.mCurrentTheme.resolveAttribute(R.attr.listItemBgColor, typedValueListItemBgColor, true);
+                                int resolvedListItemBgColor = typedValueListItemBgColor.data;
+                                Log.d(LOG_TAG, "resolvedListItemBgColor: " + Integer.toHexString(resolvedListItemBgColor));
+                                TypedValue typedValueThemeName = new TypedValue();
+                                holder.mCurrentTheme.resolveAttribute(R.attr.themeName, typedValueThemeName, true);
+                                CharSequence resolvedThemeName = typedValueThemeName.string;
+                                Log.d(LOG_TAG, "resolvedThemeName: " + resolvedThemeName);
 
-                                holder.mTvFilmTitle.setTextColor(resolvedListItemCardTextColor);
-                                holder.mTvFilmReleaseDate.setTextColor(resolvedListItemCardTextColor);
-                                holder.mLlColoredBarWithText.setBackgroundColor(mutedSwatch.getRgb());
+                                /* If dark theme, don't get list item card bg color from palette */
+                                Log.d(LOG_TAG, "Current theme is: " + resolvedThemeName.toString());
+                                if (resolvedThemeName.toString().equals(mContext.getResources().getString(R.string.theme_name_dark))) {
+                                    holder.mLlColoredBarWithText.setBackgroundColor(resolvedListItemBgColor);
+                                } else if (resolvedThemeName.toString().equals(mContext.getResources().getString(R.string.theme_name_light))) {
+                                    holder.mLlColoredBarWithText.setBackgroundColor(mutedSwatch.getRgb());
+                                }
                             }
                         });
                     }

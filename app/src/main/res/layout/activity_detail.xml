@@ -81,13 +81,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:textAllCaps="true"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:text="Summary"/>
         <TextView
             android:id="@+id/tv_film_overview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:text="This test film has the testiest overview aka summary. Check out how it's more than one sentence."/>
     </LinearLayout>
 

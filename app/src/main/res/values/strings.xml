@@ -8,4 +8,6 @@
     <string name="settings_theme_dark_value">AppThemeDark</string>
     <string name="settings_theme_default">AppThemeDark</string>
     <string name="settings_title">Settings</string>
+    <string name="theme_name_light">AppThemeLight</string>
+    <string name="theme_name_dark">AppThemeDark</string>
 </resources>
