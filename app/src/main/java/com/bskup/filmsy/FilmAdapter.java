@@ -23,6 +23,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,7 +137,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
      * @param position Position of the item within the data set the adapter is using
      */
     @Override
-    public void onBindViewHolder(final FilmAdapterViewHolder holder, final int position) {
+    public void onBindViewHolder(final FilmAdapterViewHolder holder, int position) {
         mHolder = holder;
         /* Get poster and other info from our data set at position */
         final Film currentFilm = mFilmData.get(position);
@@ -158,7 +160,6 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         // TODO Do stuff with other fields or delete them
         holder.mTvFilmTitle.setText(title);
 
-        /* Parse date */
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         SimpleDateFormat outputOnlyYearFormat = new SimpleDateFormat("yyyy", Locale.US);
         try {
@@ -169,10 +170,11 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
             holder.mTvFilmReleaseDate.setText(releaseDate);
         }
 
-        /* Set popularity and rating */
-        holder.mTvFilmPopularity.setText(String.valueOf(popularity));
+        /* Set vote average (rating), set formatted popularity */
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+        holder.mTvFilmPopularity.setText(String.valueOf(decimalFormat.format(popularity)));
         holder.mTvFilmRating.setText(String.valueOf(voteAverage));
-
 
         Log.d(LOG_TAG, "Title and release date set on position: " + position);
 
@@ -181,13 +183,13 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
             Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster, new Callback.EmptyCallback() {
                 @Override
                 public void onSuccess() {
-                    Log.d(LOG_TAG, "onSuccess called for position: " + position);
+                    Log.d(LOG_TAG, "onSuccess called for position: " + holder.getAdapterPosition());
                     Bitmap bitmap = ((BitmapDrawable) holder.mIvPoster.getDrawable()).getBitmap();
                     if (bitmap != null) {
                         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(Palette palette) {
-                                Log.d(LOG_TAG, "palette generated for position: " + position);
+                                Log.d(LOG_TAG, "palette generated for position: " + holder.getAdapterPosition());
                                 Palette.Swatch mutedSwatch = palette.getMutedSwatch();
                                 if (mutedSwatch == null) {
                                     Log.d(LOG_TAG, "Null swatch!");
@@ -216,9 +218,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
                     }
                 }
             });
-
         }
-
     }
 
     /** Returns the number of items to display. Used to help layout our Views and for animations.
