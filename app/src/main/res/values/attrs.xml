@@ -6,4 +6,7 @@
     <attr name="listItemCardTextColor" format="reference"/>
     <attr name="listItemBgColor" format="reference"/>
     <attr name="themeName" format="reference"/>
+    <attr name="drawableDate" format="reference"/>
+    <attr name="drawableRating" format="reference"/>
+    <attr name="drawablePopular" format="reference"/>
 </resources>

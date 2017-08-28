@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="#9e9e9e"
+            android:background="?attr/listItemBgColor"
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -41,10 +41,11 @@
                 android:id="@+id/iv_mini_date"
                 android:layout_width="11dp"
                 android:layout_height="11dp"
+                android:layout_marginTop="1dp"
                 android:alpha="0.7"
-                android:src="@drawable/ic_date_white"
-                app:layout_constraintTop_toTopOf="@+id/tv_film_release_date"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_film_release_date"/>
+                android:src="?attr/drawableDate"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_film_release_date"
+                app:layout_constraintTop_toTopOf="@+id/tv_film_release_date"/>
 
             <TextView
                 android:id="@+id/tv_film_release_date"
@@ -55,20 +56,20 @@
                 android:text="2014"
                 android:textColor="?attr/listItemCardTextColor"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_film_title"
-                app:layout_constraintLeft_toRightOf="@+id/iv_mini_date"/>
+                app:layout_constraintLeft_toRightOf="@+id/iv_mini_date"
+                app:layout_constraintTop_toBottomOf="@+id/tv_film_title"/>
 
             <ImageView
                 android:id="@+id/iv_mini_popularity"
                 android:layout_width="11dp"
                 android:layout_height="11dp"
-                android:layout_marginRight="2dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="1dp"
                 android:alpha="0.7"
-                android:src="@drawable/ic_popular_white"
+                android:src="?attr/drawablePopular"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_film_popularity"
                 app:layout_constraintLeft_toRightOf="@+id/tv_film_release_date"
-                app:layout_constraintTop_toTopOf="@+id/tv_film_popularity"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_film_popularity"/>
+                app:layout_constraintTop_toTopOf="@+id/tv_film_popularity"/>
 
             <TextView
                 android:id="@+id/tv_film_popularity"
@@ -86,13 +87,13 @@
                 android:id="@+id/iv_mini_rating"
                 android:layout_width="11dp"
                 android:layout_height="11dp"
-                android:layout_marginRight="2dp"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_top_rated_white"
+                android:layout_marginTop="01dp"
                 android:alpha="0.7"
+                android:src="?attr/drawableRating"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_film_rating"
                 app:layout_constraintLeft_toRightOf="@+id/tv_film_popularity"
-                app:layout_constraintTop_toTopOf="@+id/tv_film_rating"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_film_rating"/>
+                app:layout_constraintTop_toTopOf="@+id/tv_film_rating"/>
 
             <TextView
                 android:id="@+id/tv_film_rating"
@@ -103,8 +104,8 @@
                 android:text="7.7"
                 android:textColor="?attr/listItemCardTextColor"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_film_title"
-                app:layout_constraintLeft_toRightOf="@+id/iv_mini_rating"/>
+                app:layout_constraintLeft_toRightOf="@+id/iv_mini_rating"
+                app:layout_constraintTop_toBottomOf="@+id/tv_film_title"/>
 
         </android.support.constraint.ConstraintLayout>
 

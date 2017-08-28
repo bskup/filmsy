@@ -12,6 +12,9 @@
         <item name="listItemCardTextColor">@color/light_listItemCardTextColor</item>
         <item name="listItemBgColor">@color/light_listItemBgColor</item>
         <item name="themeName">@string/theme_name_light</item>
+        <item name="drawableDate">@drawable/ic_date_white</item>
+        <item name="drawablePopular">@drawable/ic_popular_white</item>
+        <item name="drawableRating">@drawable/ic_top_rated_white</item>
     </style>
 
     <!-- Dark theme. -->
@@ -26,6 +29,9 @@
         <item name="listItemCardTextColor">@color/dark_listItemCardTextColor</item>
         <item name="listItemBgColor">@color/dark_listItemBgColor</item>
         <item name="themeName">@string/theme_name_dark</item>
+        <item name="drawableDate">@drawable/ic_date_teal_accent</item>
+        <item name="drawablePopular">@drawable/ic_popular_teal_accent</item>
+        <item name="drawableRating">@drawable/ic_top_rated_teal_accent</item>
     </style>
 
 </resources>

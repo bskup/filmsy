@@ -26,7 +26,7 @@ public class NetworkUtils {
     /** API Key - REMOVE FROM PUBLICLY-SHARED CODE */
     private static final String apiKey = "REMOVED_FOR_SHARING";
 
-    final static String API_KEY_PARAM = "api_key";
+    private static final String API_KEY_PARAM = "api_key";
 
     /** Builds the URL used to talk to the movie database server.
      *
@@ -36,9 +36,9 @@ public class NetworkUtils {
      */
     public static URL buildUrl(String endpoint) {
         String baseUrlWithEndpoint;
-        if (endpoint == "/popular") {
+        if (endpoint.equals("/popular")) {
             baseUrlWithEndpoint = TMD_BASE_URL + TMD_POPULAR_ENDPOINT;
-        } else if (endpoint == "/top_rated") {
+        } else if (endpoint.equals("/top_rated")) {
             baseUrlWithEndpoint = TMD_BASE_URL + TMD_TOP_RATED_ENDPOINT;
         } else {
             baseUrlWithEndpoint = TMD_BASE_URL + endpoint;

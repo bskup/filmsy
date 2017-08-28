@@ -196,21 +196,15 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
                                     return;
                                 }
 
-                                /* Resolve list item bg color and theme name */
-                                TypedValue typedValueListItemBgColor = new TypedValue();
-                                holder.mCurrentTheme.resolveAttribute(R.attr.listItemBgColor, typedValueListItemBgColor, true);
-                                int resolvedListItemBgColor = typedValueListItemBgColor.data;
-                                Log.d(LOG_TAG, "resolvedListItemBgColor: " + Integer.toHexString(resolvedListItemBgColor));
+                                /* Resolve theme name */
                                 TypedValue typedValueThemeName = new TypedValue();
                                 holder.mCurrentTheme.resolveAttribute(R.attr.themeName, typedValueThemeName, true);
                                 CharSequence resolvedThemeName = typedValueThemeName.string;
                                 Log.d(LOG_TAG, "resolvedThemeName: " + resolvedThemeName);
 
-                                /* If dark theme, don't get list item card bg color from palette */
+                                /* If light theme, get list item card bg color from palette */
                                 Log.d(LOG_TAG, "Current theme is: " + resolvedThemeName.toString());
-                                if (resolvedThemeName.toString().equals(mContext.getResources().getString(R.string.theme_name_dark))) {
-                                    holder.mLlColoredBarWithText.setBackgroundColor(resolvedListItemBgColor);
-                                } else if (resolvedThemeName.toString().equals(mContext.getResources().getString(R.string.theme_name_light))) {
+                                if (resolvedThemeName.toString().equals(mContext.getResources().getString(R.string.theme_name_light))) {
                                     holder.mLlColoredBarWithText.setBackgroundColor(mutedSwatch.getRgb());
                                 }
                             }
