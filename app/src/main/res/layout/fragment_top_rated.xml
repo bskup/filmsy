@@ -29,4 +29,32 @@
         app:layout_anchor="@id/rv_main_scrolling_posters"
         app:layout_anchorGravity="top"/>
 
+    <LinearLayout
+        android:id="@+id/empty_state_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_empty_state"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_margin="8dp"
+            android:alpha="0.4"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_empty_state"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="8dp"
+            android:text="@string/empty_state_default_text"
+            android:visibility="gone"/>
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bskup.filmsy.util.FilmJsonUtils;
@@ -39,6 +42,8 @@ public class PopularFragment extends Fragment implements FilmAdapter.FilmAdapter
     private FilmAdapter mFilmAdapter;
     private Activity mContext;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ImageView mEmptyStateImageView;
+    private TextView mEmptyStateTextView;
 
     public static PopularFragment newInstance() {
         PopularFragment fragment = new PopularFragment();
@@ -71,6 +76,8 @@ public class PopularFragment extends Fragment implements FilmAdapter.FilmAdapter
         /* Get reference to RecyclerView, error textView and progress bar */
         mRecyclerView = (RecyclerView) inflatedLayout.findViewById(R.id.rv_main_scrolling_posters);
         mTvErrorMsg = (TextView) inflatedLayout.findViewById(R.id.tv_main_error_msg);
+        mEmptyStateImageView = (ImageView) inflatedLayout.findViewById(R.id.iv_empty_state);
+        mEmptyStateTextView = (TextView) inflatedLayout.findViewById(R.id.tv_empty_state);
 
         /* Use to improve performance if you know that changes in content do not
          * change the child layout size in the RecyclerView */
@@ -111,9 +118,25 @@ public class PopularFragment extends Fragment implements FilmAdapter.FilmAdapter
     private void loadPopularFilmData() {
         hideErrorMsg();
 
-        // TODO fetch a preference to affect the AsyncTask (see loadWeatherData)
-        new FetchFilmDataTask().execute(TMD_POPULAR_ENDPOINT);
-        Log.d(LOG_TAG, "new FetchFilmDataTask executed from loadFilmData()");
+        // Only execute the new asynctask if we have a network connection
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            // TODO fetch a preference to affect the AsyncTask (see loadWeatherData)
+            new FetchFilmDataTask().execute(TMD_POPULAR_ENDPOINT);
+            Log.d(LOG_TAG, "new FetchFilmDataTask executed from loadFilmData()");
+        } else {
+            // Display network error (hide loading indicator and change empty state text)
+            mSwipeRefreshLayout.setRefreshing(false);
+            mEmptyStateTextView.setVisibility(View.VISIBLE);
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
+            mEmptyStateImageView.setVisibility(View.VISIBLE);
+            mEmptyStateImageView.setImageResource(R.drawable.ic_no_network_accent_green);
+        }
     }
 
     /** Overridden in order to handle RecyclerView item clicks.
@@ -133,6 +156,8 @@ public class PopularFragment extends Fragment implements FilmAdapter.FilmAdapter
     /** Helper method to hide error msg and show film data RecyclerView */
     private void hideErrorMsg() {
         mTvErrorMsg.setVisibility(View.INVISIBLE);
+        mEmptyStateTextView.setVisibility(View.GONE);
+        mEmptyStateImageView.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 

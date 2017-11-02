@@ -10,4 +10,6 @@
     <string name="settings_title">Settings</string>
     <string name="theme_name_light">AppThemeLight</string>
     <string name="theme_name_dark">AppThemeDark</string>
+    <string name="empty_state_default_text">No network connection.</string>
+    <string name="no_internet_connection">No network connection.</string>
 </resources>
