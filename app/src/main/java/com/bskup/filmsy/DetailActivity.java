@@ -18,12 +18,14 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 import static android.R.attr.bitmap;
 
 /**
  * Created on 6/15/2017.
  */
-
 public class DetailActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -79,6 +81,8 @@ public class DetailActivity extends AppCompatActivity {
         final LinearLayout llColoredBarWithText = (LinearLayout) findViewById(R.id.ll_colored_bar_with_text);
         final View vColorTintBox = (View) findViewById(R.id.v_color_tint_box);
         ImageView ivPosterSmallFullview = (ImageView) findViewById(R.id.iv_poster_small_fullview);
+        TextView tvFilmPopularity = (TextView) findViewById(R.id.tv_film_popularity);
+        TextView tvFilmRating = (TextView) findViewById(R.id.tv_film_rating);
 
         /* Set data on views */
         /* Set poster to imageView using Picasso, colors using Palette */
@@ -117,12 +121,14 @@ public class DetailActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "2nd picasso load image called");
 
         }
-        /* Set title */
-        tvFilmTitle.setText(title);
-        /* Set release date */
-        tvFilmReleaseDate.setText(releaseDate);
-        /* Set overview */
-        tvFilmOverview.setText(overview);
 
+        /* Display current film's data in corresponding views */
+        tvFilmTitle.setText(title);
+        tvFilmReleaseDate.setText(releaseDate);
+        tvFilmOverview.setText(overview);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+        tvFilmPopularity.setText(String.valueOf(decimalFormat.format(popularity)));
+        tvFilmRating.setText(String.valueOf(voteAverage));
     }
 }

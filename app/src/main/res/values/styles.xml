@@ -34,4 +34,48 @@
         <item name="drawableRating">@drawable/ic_top_rated_teal_accent</item>
     </style>
 
+    <!-- Details activity film title style -->
+    <style name="DetailsActivityFilmTitle">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Details activity mini image style -->
+    <style name="DetailsActivityMiniImage">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:alpha">0.9</item>
+    </style>
+
+    <!-- Details activity mini headers -->
+    <style name="DetailsActivityMiniHeaders">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">?attr/listItemCardTextColor</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:alpha">0.9</item>
+    </style>
+
+    <!-- Details activity mini data under headers -->
+    <style name="DetailsActivityMiniData">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:textColor">?attr/listItemCardTextColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
