@@ -180,7 +180,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
 
         /* Set poster to imageView using Picasso, colors using Palette */
         if (posterPath != null) {
-            Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).into(holder.mIvPoster, new Callback.EmptyCallback() {
+            Picasso.with(mContext).load(TMD_BASE_IMAGE_URL + posterPath).placeholder(R.drawable.ic_placeholder_accent_green).error(R.drawable.ic_no_image_accent_green).into(holder.mIvPoster, new Callback.EmptyCallback() {
                 @Override
                 public void onSuccess() {
                     Log.d(LOG_TAG, "onSuccess called for position: " + holder.getAdapterPosition());
